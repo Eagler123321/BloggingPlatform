@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/BloggingPlatformDataBase
+    username: postgres
+    password: 228339666
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  group-configs:
+    - group: 'Blogging API'
+      packages-to-scan: com.example.bloggingplatform.controller

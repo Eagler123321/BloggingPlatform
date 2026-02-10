@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-post-tag-table-id" author="eager">
+        <createTable tableName="post_tags">
+            <column name="post_id" type="bigint"/>
+            <column name="tag_id" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey tableName="post_tags" columnNames="post_id,tag_id"/>
+
+        <addForeignKeyConstraint baseTableName="post_tags"
+                                 baseColumnNames="post_id"
+                                 constraintName="fk_post_tags_post"
+                                 referencedTableName="post"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="post_tags"
+                                 baseColumnNames="tag_id"
+                                 constraintName="fk_post_tags_tag"
+                                 referencedTableName="tag"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+
+</databaseChangeLog>
