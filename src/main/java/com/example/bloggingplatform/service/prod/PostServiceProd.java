@@ -3,10 +3,12 @@ package com.example.bloggingplatform.service.prod;
 import com.example.bloggingplatform.dto.requestDto.PostRequestDto;
 import com.example.bloggingplatform.dto.responseDto.PostResponseDto;
 import com.example.bloggingplatform.entity.Post;
+import com.example.bloggingplatform.error.NotFoundException;
 import com.example.bloggingplatform.mapper.PostMapper;
 import com.example.bloggingplatform.repository.PostRepository;
 import com.example.bloggingplatform.repository.TagRepository;
 import com.example.bloggingplatform.service.noimlp.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
+@Slf4j
 @Service
 public class PostServiceProd implements PostService {
     private final PostRepository postRepository;
@@ -29,6 +32,8 @@ public class PostServiceProd implements PostService {
     @Override
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto) {
+        log.info("Creating new post with title: {}", postRequestDto.getTitle());
+
         Post newPost = postMapper.toEntity(postRequestDto);
         newPost.setCreatedAt(LocalDateTime.now());
         newPost.setUpdatedAt(LocalDateTime.now());
@@ -38,25 +43,29 @@ public class PostServiceProd implements PostService {
         }
 
         Post savedPost = postRepository.save(newPost);
+        log.info("Post created successfully with title: {}", postRequestDto.getTitle());
         return postMapper.toDto(savedPost);
     }
 
     @Override
     @Transactional
     public PostResponseDto updatePostById(PostRequestDto postRequestDto, Long id) {
+        log.info("Updating new post with id: {}", id);
         Post oldPost = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found with id" + id));
+                .orElseThrow(() -> new NotFoundException("Post not found with id" + id));
 
         oldPost.setTitle(postRequestDto.getTitle());
         oldPost.setContent(postRequestDto.getContent());
         oldPost.setUpdatedAt(LocalDateTime.now());
 
         if (postRequestDto.getTagIds() != null && !postRequestDto.getTagIds().isEmpty()) {
+
             oldPost.setTags(new HashSet<>(tagRepository.findAllById(postRequestDto.getTagIds())));
         }
 
         Post updatedPost = postRepository.save(oldPost);
 
+        log.info("Post updated successfully with id: {}", id);
         return postMapper.toDto(updatedPost);
     }
 
@@ -64,7 +73,7 @@ public class PostServiceProd implements PostService {
     @Transactional(readOnly = true)
     public PostResponseDto getPostById(Long id) {
         Post foundPost = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found with id" + id));
+                .orElseThrow(() -> new NotFoundException("Post not found with id" + id));
 
         return postMapper.toDto(foundPost);
     }
@@ -82,7 +91,9 @@ public class PostServiceProd implements PostService {
     @Override
     @Transactional
     public void deletePostById(Long id) {
+        log.info("Deleting post with id: {}", id);
         postRepository.deleteById(id);
+        log.info("Post deleted successfully with id: {}", id);
     }
 
 }

@@ -5,6 +5,7 @@ import com.example.bloggingplatform.dto.responseDto.PostResponseDto;
 import com.example.bloggingplatform.service.prod.PostServiceProd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,13 @@ public class PostController {
 
     @PostMapping
     @Operation(summary = "Creating post")
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto postRequestDto){
+    public ResponseEntity<PostResponseDto> createPost(@Valid @RequestBody PostRequestDto postRequestDto){
         PostResponseDto createdPost = postServiceProd.createPost(postRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
     }
     @PutMapping("/{id}")
     @Operation(summary = "Updating post by id")
-    public ResponseEntity<PostResponseDto> updatePostById(@RequestBody PostRequestDto postRequestDto, @PathVariable Long id){
+    public ResponseEntity<PostResponseDto> updatePostById(@Valid @RequestBody PostRequestDto postRequestDto, @PathVariable Long id){
          PostResponseDto updatedPost = postServiceProd.updatePostById(postRequestDto, id);
          return ResponseEntity.status(HttpStatus.OK).body(updatedPost);
     }

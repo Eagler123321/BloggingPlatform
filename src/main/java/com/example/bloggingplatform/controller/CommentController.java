@@ -5,6 +5,7 @@ import com.example.bloggingplatform.dto.responseDto.CommentResponseDto;
 import com.example.bloggingplatform.service.prod.CommentServiceProd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,13 @@ public class CommentController {
 
     @PostMapping
     @Operation(summary = "Creating comment")
-    public ResponseEntity<CommentResponseDto> createComment(@RequestBody CommentRequestDto commentRequestDto){
+    public ResponseEntity<CommentResponseDto> createComment(@Valid @RequestBody CommentRequestDto commentRequestDto){
         CommentResponseDto savedComment = commentService.createComment(commentRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }
     @PutMapping( "/{id}")
     @Operation(summary = "Updating comment by id")
-    public ResponseEntity<CommentResponseDto> updateCommentById(@RequestBody CommentRequestDto commentRequestDto, @PathVariable Long id){
+    public ResponseEntity<CommentResponseDto> updateCommentById(@Valid @RequestBody CommentRequestDto commentRequestDto, @PathVariable Long id){
         CommentResponseDto updatedComment = commentService.updateCommentById(commentRequestDto, id);
         return ResponseEntity.status(HttpStatus.OK).body(updatedComment);
     }
