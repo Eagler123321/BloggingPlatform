@@ -11,7 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -64,6 +68,7 @@ public class TagServiceProd implements TagService {
     public List<TagResponseDto> getTags() {
         List<TagResponseDto> foundTags = tagRepository.findAll().stream()
                 .map(tagMapper::toDto)
+                .sorted(Comparator.comparing(TagResponseDto::getId))
                 .toList();
 
         return foundTags;

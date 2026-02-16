@@ -9,6 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  mail:
+    password: "${spring.mail.password}"
 springdoc:
   api-docs:
     path: /api-docs

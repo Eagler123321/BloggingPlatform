@@ -28,9 +28,9 @@ public class TagController {
         TagResponseDto createdTag = tagServiceProd.createTag(tagRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTag);
     }
-    @PutMapping
+    @PutMapping("/{id}")
     @Operation(summary = "Updating tag by id")
-    public ResponseEntity<TagResponseDto> updateTagById(@Valid @RequestBody TagRequestDto tagRequestDto, Long id){
+    public ResponseEntity<TagResponseDto> updateTagById(@Valid @RequestBody TagRequestDto tagRequestDto, @PathVariable Long id){
         TagResponseDto updatedTag = tagServiceProd.updateTagById(tagRequestDto, id);
         return ResponseEntity.status(HttpStatus.OK).body(updatedTag);
     }
